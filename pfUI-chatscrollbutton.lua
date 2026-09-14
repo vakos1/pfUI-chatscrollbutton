@@ -43,6 +43,7 @@ local function CreateScrollButton(chatFrame, id)
   btn.isMouseOver = false
   btn.pulseTime = 0
   btn.hasUnread = false
+  btn.borderIsBright = false
 
   btn:SetScript("OnEnter", function()
     btn.isMouseOver = true
@@ -113,6 +114,11 @@ watcher:SetScript("OnUpdate", function()
     end
 
     if btn.hasUnread then
+      if not btn.borderIsBright then
+        btn:SetBackdropBorderColor(0.2, 0.8, 0.6, 1)
+        btn.borderIsBright = true
+      end
+
       if btn.isMouseOver then
         glowAlpha = 0.25
       end
@@ -131,12 +137,9 @@ watcher:SetScript("OnUpdate", function()
           glowAlpha = pulseAlpha
         end
       end
-    end
-
-    if btn.hasUnread then
-      btn:SetBackdropBorderColor(0.2, 0.8, 0.6, 1)
-    else
+    elseif btn.borderIsBright then
       btn:SetBackdropBorderColor(0.35, 0.35, 0.35, 0.6)
+      btn.borderIsBright = false
     end
 
     if glowAlpha > 0 then
