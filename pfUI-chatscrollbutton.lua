@@ -23,7 +23,7 @@ local function CreateScrollButton(chatFrame, id)
   })
 
   btn:SetBackdropColor(0.08, 0.08, 0.08, 0.9)
-  btn:SetBackdropBorderColor(0.2, 0.8, 0.6, 1)
+  btn:SetBackdropBorderColor(0.35, 0.35, 0.35, 0.6)
 
   local icon = btn:CreateTexture(nil, "ARTWORK")
   icon:SetTexture(pfUI.media["img:down"])
@@ -42,6 +42,7 @@ local function CreateScrollButton(chatFrame, id)
   btn.glow = glow
   btn.isMouseOver = false
   btn.pulseTime = 0
+  btn.hasUnread = false
 
   btn:SetScript("OnEnter", function()
     btn.isMouseOver = true
@@ -55,6 +56,7 @@ local function CreateScrollButton(chatFrame, id)
 
   btn:SetScript("OnClick", function()
     chatFrame:ScrollToBottom()
+    btn.hasUnread = false
     btn:Hide()
   end)
 
@@ -80,6 +82,8 @@ for _, chatFrame in ipairs(chatFrames) do
     originalAddMessage(self, ...)
 
     if wasScrolledUp and self.scrollDownBtn and self ~= ChatFrame2 then
+      self.scrollDownBtn.hasUnread = true
+
       if self.scrollDownBtn.pulseTime <= 0 then
         self.scrollDownBtn.pulseTime = 0.45
       end
@@ -103,23 +107,36 @@ watcher:SetScript("OnUpdate", function()
       btn:Hide()
     end
 
-    if btn.isMouseOver then
-      glowAlpha = 0.25
+    if not shouldShow then
+      btn.hasUnread = false
+      btn.pulseTime = 0
     end
 
-    if btn.pulseTime > 0 then
-      btn.pulseTime = btn.pulseTime - arg1
-
-      if btn.pulseTime < 0 then
-        btn.pulseTime = 0
+    if btn.hasUnread then
+      if btn.isMouseOver then
+        glowAlpha = 0.25
       end
 
-      local pulseProgress = 1 - (btn.pulseTime / 0.45)
-      local pulseAlpha = 0.15 + (math.sin(pulseProgress * math.pi) * 0.55)
+      if btn.pulseTime > 0 then
+        btn.pulseTime = btn.pulseTime - arg1
 
-      if pulseAlpha > glowAlpha then
-        glowAlpha = pulseAlpha
+        if btn.pulseTime < 0 then
+          btn.pulseTime = 0
+        end
+
+        local pulseProgress = 1 - (btn.pulseTime / 0.45)
+        local pulseAlpha = 0.15 + (math.sin(pulseProgress * math.pi) * 0.55)
+
+        if pulseAlpha > glowAlpha then
+          glowAlpha = pulseAlpha
+        end
       end
+    end
+
+    if btn.hasUnread then
+      btn:SetBackdropBorderColor(0.2, 0.8, 0.6, 1)
+    else
+      btn:SetBackdropBorderColor(0.35, 0.35, 0.35, 0.6)
     end
 
     if glowAlpha > 0 then
