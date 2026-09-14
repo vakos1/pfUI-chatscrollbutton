@@ -6,7 +6,7 @@ local function CreateScrollButton(chatFrame, id)
   btn:SetWidth(22)
   btn:SetHeight(22)
   btn:SetPoint("BOTTOMRIGHT", chatFrame, "BOTTOMRIGHT", -2, 2)
-  btn:SetFrameStrata("HIGH")
+  btn:SetFrameStrata(chatFrame:GetFrameStrata())
 
   btn:SetBackdrop({
     bgFile = "Interface\\Buttons\\WHITE8X8",
