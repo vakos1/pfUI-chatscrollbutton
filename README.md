@@ -10,6 +10,9 @@ When a chat window is scrolled up, a small button appears in its bottom-right co
 - Uses pfUI's native down-arrow texture
 - Appears only when a visible chat window is scrolled up
 - Instantly scrolls the selected chat window to the bottom
+- Renders beneath other game windows (such as bags) so it never overlaps them, regardless of what's open or the order things were opened in
+- Border highlights on hover, matching pfUI's standard button style
+- Glows and brightens its border only when there's an actual unread message waiting - scrolling up manually on your own doesn't trigger it
 - Briefly pulses when a new message arrives in a scrolled-up chat window
 - Does not pulse for the default Combat Log window
 - Supports all seven standard Vanilla chat frames
@@ -52,7 +55,11 @@ Scroll upward in a visible chat window. A small arrow button will appear in the 
 
 Click the button to immediately return to the newest chat messages.
 
-When a new message arrives while the chat window is scrolled up, the button gives one brief mint glow pulse. The default Combat Log window does not pulse to avoid visual noise during combat.
+The button's border reflects its state: a dim gray border at rest, a brighter highlight while your cursor is over it, and a bright mint border whenever there's an actual unread message waiting - the mint highlight takes priority over the hover highlight, so it always stays visible as a notification even while you're hovering the button.
+
+When a new message arrives while the chat window is scrolled up, the button gives one brief mint glow pulse in addition to the border highlight. The default Combat Log window does not pulse to avoid visual noise during combat.
+
+The button always renders beneath other game windows, such as your bags, so it won't visually overlap them no matter what else is open.
 
 ## Compatibility
 
